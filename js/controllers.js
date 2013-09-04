@@ -6,9 +6,9 @@
  */
 
 function CommentsController($scope){
-    $scope.comment = "";
+    $scope.comments = [];
     $scope.addComment = function(){
-        $scope.comment = $scope.new_comment;
+        $scope.comments.push($scope.new_comment);
         $scope.new_comment = "";
     }
 }

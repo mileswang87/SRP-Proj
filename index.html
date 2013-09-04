@@ -39,7 +39,10 @@
         Comments
     </div>
     <div class="panel-body">
-    {{ comment || "No Comments" }}<br>
+        <ul>
+            <li ng-show="!comments.length">No Comments</li>
+            <li ng-repeat="item in comments">{{item}}</li>
+        </ul>
         <form ng-submit="addComment();">
 
             <label> Input:<br>
