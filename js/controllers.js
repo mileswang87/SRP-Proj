@@ -12,6 +12,7 @@ function CommentsController($scope){
         $scope.comments.push({text: newCommentText, isRemoved: false, active: false});
         $scope.newComment = "";
         $scope.numberOfComments += 1;
+        console.log(!$scope.numberOfComments);
     };
     $scope.removeComment = function(comment){
         comment.isRemoved = true;
