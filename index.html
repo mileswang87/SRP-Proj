@@ -39,14 +39,19 @@
         Comments
     </div>
     <div class="panel-body">
-        <ul>
-            <li ng-show="!comments.length">No Comments</li>
-            <li ng-repeat="item in comments">{{item}}</li>
+        <ul class="list-group">
+            <li class="list-group-item" ng-show="!comments.length">No Comments</li>
+            <li class="list-group-item" ng-class="comment.active &&'active'" ng-click="activeComment(comment)" ng-repeat="comment in comments | filter:{isRemoved:false}">
+                <button type="button" class="close pull-right" ng-click="removeComment(comment)">&times;</button>
+                <span>{{comment.text}}</span>
+
+
+            </li>
         </ul>
-        <form ng-submit="addComment();">
+        <form ng-submit="addComment(newComment);">
 
             <label> Input:<br>
-                <textarea rows="5" cols="80" ng-model = "new_comment"></textarea>
+                <textarea rows="5" cols="80" ng-model="newComment"></textarea>
               <input type="submit" class="btn btn-default" value="Submit"/>
             </label>
         </form>
