@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>This is just a test about angularJS</title>
-    <link type="text/css" href="css/bootstrap.css" rel="stylesheet"/>
+    <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet"/>
     <style>
         body {
             margin: auto;
@@ -25,7 +25,8 @@
 <body ng-app>
 
 <div class="well"
-     ng-controller="ParagraphController">
+     ng-controller="ParagraphController"
+     ng-init="init()">
     <label>Content:</label>
     <div ng-repeat="paragraph in paragraphs" >
         <p class="hoverable"
@@ -35,7 +36,8 @@
         </p>
         <div class="panel panel-default"
              ng-show="paragraph.id == activePid"
-             ng-controller="CommentsController">
+             ng-controller="CommentsController"
+             ng-init="init()">
             <div class="panel-body">
                 <ul class="list-group">
                     <li class="list-group-item"

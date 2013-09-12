@@ -9,34 +9,62 @@
 /* Set up localhost debug request */
 if (location.host !== 'dsp-teamlemon.cloud.dreamfactory.com'){
     requestURL = 'paragraphs.json';
+    requestURL2 = "ParagraphCommentRelation.json";
 }else{
     requestURL = location.protocol + '//' + location.host +'/rest/db/SRPParagraph';
+    requestURL2 = location.protocol + '//' + location.host +'/rest/db/SRPParagraphCommentRelation'
 }
 
 function ParagraphController($scope, $http){
-    $http({
-        method: 'GET',
-        url: requestURL,
-        headers:{"X-DreamFactory-Application-Name":"MasterProject"},
-        cache: false
-    })
-        .success(function(data, status, headers, config){
+    $scope.init = function(){
+        $scope.activePid = null;
+        $http({
+            method: 'GET',
+            url: requestURL,
+            headers:{"X-DreamFactory-Application-Name":"MasterProject"},
+            cache: false
+        })
+            .success(function(data, status, headers, config){
+                $scope.paragraphs = data.record;
+            })
+            .error(function(){
+                console.log(arguments);
+            });
+    };
+
+    $scope.active = function(p){
+        if ($scope.activePid === p.id){
             $scope.activePid = null;
-            $scope.paragraphs = data.record;
-            $scope.active = function(p){
-                if ($scope.activePid === p.id){
-                    $scope.activePid = null;
-                    p.cls="";
-                }else{
-                    $scope.activePid = p.id;
-                    p.cls="active";
-                }
-            };
-        });
+            p.cls="";
+        }else{
+            $scope.activePid = p.id;
+            p.cls="active";
+        }
+    };
 }
 
-function CommentsController($scope){
-    $scope.comments = [];
+function CommentsController($scope, $http){
+    $scope.init = function(){
+        $scope.comments = [];
+        $http({
+            method: 'GET',
+            url: requestURL2,
+            params: {
+                "related":"SRPComments_by_comment_id",
+                "filter":"paragraph_id="+$scope.paragraph.id
+            },
+            headers:{"X-DreamFactory-Application-Name":"MasterProject"},
+            cache: false
+        })
+            .success(function(data, status, headers, config){
+                for (var i = 0; i < data.record.length; i ++){
+                    $scope.comments.push(data.record[i].SRPComments_by_comment_id);
+                }
+            })
+            .error(function(){
+                console.log(arguments);
+            });
+    };
     $scope.addComment = function (newCommentText) {
         if (!newCommentText) return;
         $scope.comments.push({text: newCommentText, isRemoved: false, active: false});
