@@ -26,6 +26,7 @@ function ParagraphController($scope, $http){
 function CommentsController($scope){
     $scope.comments = [];
     $scope.addComment = function (newCommentText) {
+        if (!newCommentText) return;
         $scope.comments.push({text: newCommentText, isRemoved: false, active: false});
         $scope.newComment = "";
     };
