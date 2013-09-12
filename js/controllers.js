@@ -57,8 +57,18 @@ function CommentsController($scope, $http){
             cache: false
         })
             .success(function(data, status, headers, config){
-                for (var i = 0; i < data.record.length; i ++){
-                    $scope.comments.push(data.record[i].SRPComments_by_comment_id);
+                var temp = {};
+                for (var i = 0; i < data["record"].length; i ++){
+                    var comment = data["record"][i]["SRPComments_by_comment_id"];
+                    temp[comment.id] = comment;
+                    if (comment["parent_id"] === null){
+                        $scope.comments.push(comment);
+                    }else{
+                        if (!temp[comment["parent_id"]].comments){
+                            temp[comment["parent_id"]].comments = [];
+                        }
+                        temp[comment["parent_id"]].comments.push(comment);
+                    }
                 }
             })
             .error(function(){

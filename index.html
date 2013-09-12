@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>This is just a test about angularJS</title>
+    <title>SRPProject</title>
     <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet"/>
     <style>
         body {
@@ -44,6 +44,11 @@
                             ng-hide="comments.length"><i>No Comments</i></li>
                     <li class="list-group-item" ng-repeat="comment in comments">
                         {{ comment.text }}
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="c2 in comment.comments">
+                                {{ c2.text }}
+                            </li>
+                        </ul>
                     </li>
                 </ul>
                 <form ng-submit="addComment(newComment)">
