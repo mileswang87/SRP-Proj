@@ -60,13 +60,11 @@ function CommentsController($scope, $http){
                 var temp = {};
                 for (var i = 0; i < data["record"].length; i ++){
                     var comment = data["record"][i]["SRPComments_by_comment_id"];
+                    comment.comments=[];
                     temp[comment.id] = comment;
                     if (comment["parent_id"] === null){
                         $scope.comments.push(comment);
                     }else{
-                        if (!temp[comment["parent_id"]].comments){
-                            temp[comment["parent_id"]].comments = [];
-                        }
                         temp[comment["parent_id"]].comments.push(comment);
                     }
                 }

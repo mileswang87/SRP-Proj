@@ -41,10 +41,11 @@
             <div class="panel-body">
                 <ul class="list-group">
                     <li class="list-group-item"
-                            ng-hide="comments.length"><i>No Comments</i></li>
+                            ng-show="!comments.length"><i>No Comments</i></li>
                     <li class="list-group-item" ng-repeat="comment in comments">
                         {{ comment.text }}
-                        <ul class="list-group">
+                        <ul class="list-group"
+                            ng-show="!comment.comments.length">
                             <li class="list-group-item" ng-repeat="c2 in comment.comments">
                                 {{ c2.text }}
                             </li>
