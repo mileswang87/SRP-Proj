@@ -106,7 +106,7 @@ function CommentsController($scope, $http){
         $http({
             method: 'POST',
             url: requestComments,
-            params: {
+            data: {
                 "record":newC
             },
             headers:{"X-DreamFactory-Application-Name":"MasterProject",
@@ -114,9 +114,12 @@ function CommentsController($scope, $http){
             cache: false
         })
             .success(function(data, status, headers, config){
-                newC.id = data[0].id;
+                console.log(data);
+                newC.id = data.id;
                 $scope.comment_list.splice(parent_index + 1, 0, newC);
                 $scope.newComment = "";
+
+                //todo update relations
             })
             .error(function(){
                 alert("Guest Cannot leave comments now");
