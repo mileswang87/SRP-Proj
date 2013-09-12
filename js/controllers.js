@@ -86,9 +86,12 @@ function CommentsController($scope, $http){
                 console.log(arguments);
             });
     };
+    /*
+    * add comment
+    * 1. post a new comment(newC) to requestComments url
+    * 2. post a new relation to requestParagraphCommentRelations url
+    * */
     $scope.addComment = function (newCommentText) {
-
-        //todo get id from post
         if (!newCommentText) return;
         if ($scope.activeComment){
             var parent = $scope.comment_hashmap[$scope.activeComment];
@@ -99,7 +102,7 @@ function CommentsController($scope, $http){
         }
         var newC = {
             text: newCommentText,
-            parent_index: (parent)? parent.id:null,
+            parent_id: (parent)? parent.id:null,
             level: (parent)? parent.level+1:0,
             rate:0
         };
@@ -114,8 +117,7 @@ function CommentsController($scope, $http){
             cache: false
         })
             .success(function(data, status, headers, config){
-                console.log(data);
-                newC.id = data.id;
+                newC.id = data.record[0].id;
                 $scope.comment_list.splice(parent_index + 1, 0, newC);
                 $scope.newComment = "";
 
