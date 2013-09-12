@@ -9,7 +9,7 @@ function ParagraphController($scope, $http){
     $http.get('paragraphs.json').success(function(data, status, headers, config){
         $scope.activePid = null;
         $scope.paragraphs = data.paragraphs;
-        $scope.toggleComments = function(p){
+        $scope.active = function(p){
             if ($scope.activePid === p.pid){
                 $scope.activePid = null;
                 p.cls="";
@@ -22,24 +22,20 @@ function ParagraphController($scope, $http){
     });
 
 }
-//
-//function CommentsController($scope){
-//    $scope.comments = [];
-//    $scope.numberOfComments = 0;
-//    $scope.addComment = function (newCommentText) {
-//        $scope.comments.push({text: newCommentText, isRemoved: false, active: false});
-//        $scope.newComment = "";
-//        $scope.numberOfComments += 1;
-//        console.log(!$scope.numberOfComments);
-//    };
-//    $scope.removeComment = function(comment){
-//        comment.isRemoved = true;
-//        $scope.numberOfComments -= 1;
-//    };
-//    $scope.activeComment = function(comment){
-//        comment.active = !comment.active;
-//    };
-//
-//
-//    $scope.addComment("this is a test comment");
-//}
+
+function CommentsController($scope){
+    $scope.comments = [];
+    $scope.addComment = function (newCommentText) {
+        $scope.comments.push({text: newCommentText, isRemoved: false, active: false});
+        $scope.newComment = "";
+    };
+    $scope.removeComment = function(comment){
+        var index = $scope.comments.indexOf(comment);
+        $scope.comments.splice(index, 1)
+    };
+    $scope.activeComment = function(comment){
+        comment.active = !comment.active;
+    };
+
+
+}

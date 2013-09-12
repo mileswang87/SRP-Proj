@@ -26,21 +26,29 @@
 </head>
 <body ng-app>
 
-<div class="well" ng-controller="ParagraphController">
+<div class="well"
+     ng-controller="ParagraphController">
     <label>Content:</label>
     <div ng-repeat="paragraph in paragraphs" >
-        <p class="hoverable" ng-click="toggleComments(paragraph)" ng-class="{'active' : paragraph.pid==activePid}">
+        <p class="hoverable"
+           ng-click="active(paragraph)"
+           ng-class="{'active' : paragraph.pid==activePid}">
             {{ paragraph.text }}
         </p>
-        <div class="panel panel-default" ng-show="paragraph.pid == activePid">
+        <div class="panel panel-default"
+             ng-show="paragraph.pid == activePid"
+             ng-controller="CommentsController">
             <div class="panel-body">
                 <ul class="list-group">
-                    <li class="list-group-item">No Comments</li>
+                    <li class="list-group-item"
+                            ng-hide="comments.length"><i>No Comments</i></li>
+                    <li class="list-group-item" ng-repeat="comment in comments">
+                        {{ comment.text }}
+                    </li>
                 </ul>
-                <form >
-
+                <form ng-submit="addComment(newComment)">
                     <label> Input:<br>
-                        <textarea rows="5" cols="80"></textarea>
+                        <textarea rows="5" cols="80" ng-model="newComment"></textarea>
                         <input type="submit" class="btn btn-default" value="Submit"/>
                     </label>
                 </form>
