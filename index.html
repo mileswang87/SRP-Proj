@@ -2,8 +2,6 @@
 <html>
 <head>
     <title>This is just a test about angularJS</title>
-    <script src="angular.js"></script>
-    <script src="js/controllers.js"></script>
     <link type="text/css" href="css/bootstrap.css" rel="stylesheet"/>
     <style>
         body {
@@ -32,11 +30,11 @@
     <div ng-repeat="paragraph in paragraphs" >
         <p class="hoverable"
            ng-click="active(paragraph)"
-           ng-class="{'active' : paragraph.pid==activePid}">
+           ng-class="{'active' : paragraph.id==activePid}">
             {{ paragraph.text }}
         </p>
         <div class="panel panel-default"
-             ng-show="paragraph.pid == activePid"
+             ng-show="paragraph.id == activePid"
              ng-controller="CommentsController">
             <div class="panel-body">
                 <ul class="list-group">
@@ -59,6 +57,7 @@
 
 </div>
 
-
+<script src="angular.js"></script>
+<script src="js/controllers.js"></script>
 </body>
 </html>
