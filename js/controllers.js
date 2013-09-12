@@ -9,9 +9,11 @@
 if (location.host !== 'dsp-teamlemon.cloud.dreamfactory.com'){
     requestURL = 'paragraphs.json';
     requestURL2 = "ParagraphCommentRelation.json";
+    requestComments = "";
 }else{
     requestURL = location.protocol + '//' + location.host +'/rest/db/SRPParagraph';
     requestURL2 = location.protocol + '//' + location.host +'/rest/db/SRPParagraphCommentRelation'
+    requestComments = location.protocol + '//' + location.host +'/rest/db/SRPComments'
 }
 
 var myApp = angular.module('SRP', []);
@@ -85,6 +87,8 @@ function CommentsController($scope, $http){
             });
     };
     $scope.addComment = function (newCommentText) {
+
+        //todo get id from post
         if (!newCommentText) return;
         if ($scope.activeComment){
             var parent = $scope.comment_hashmap[$scope.activeComment];
@@ -95,13 +99,29 @@ function CommentsController($scope, $http){
         }
         var newC = {
             text: newCommentText,
-            id: null,
             parent_index: (parent)? parent.id:null,
             level: (parent)? parent.level+1:0,
             rate:0
         };
-        $scope.comment_list.splice(parent_index + 1, 0, newC);
-        $scope.newComment = "";
+        $http({
+            method: 'POST',
+            url: requestComments,
+            params: {
+                "record":newC
+            },
+            headers:{"X-DreamFactory-Application-Name":"MasterProject",
+            "Content-Type":"application/json"},
+            cache: false
+        })
+            .success(function(data, status, headers, config){
+                newC.id = data[0].id;
+                $scope.comment_list.splice(parent_index + 1, 0, newC);
+                $scope.newComment = "";
+            })
+            .error(function(){
+                alert("Guest Cannot leave comments now");
+                console.log(arguments);
+            });
     };
     $scope.removeComment = function(comment){
         var index = $scope.comments.indexOf(comment);
