@@ -10,7 +10,6 @@
         }
 
         p.hoverable{
-
         }
 
         p.hoverable:hover{
@@ -21,13 +20,10 @@
             color:blue;
         }
 
-        .list-group-item.level1{
-            padding-left:50px;
-        }
 
     </style>
 </head>
-<body ng-app>
+<body ng-app="SRP">
 
 <div class="well"
      ng-controller="ParagraphController"
@@ -51,6 +47,7 @@
                         ng-click="active(comment)"
                         ng-class="{'active' : comment.id == activeComment}"
                         ng-repeat="comment in comment_list">
+                        <span class="glyphicon glyphicon-chevron-right  glyphicon-chevron-right" ng-repeat="n in [] | range:comment.level*2"></span>
                         {{ comment.text }}
                     </li>
                 </ul>

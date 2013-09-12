@@ -5,7 +5,6 @@
  * Time: 12:20 PM
  */
 
-
 /* Set up localhost debug request */
 if (location.host !== 'dsp-teamlemon.cloud.dreamfactory.com'){
     requestURL = 'paragraphs.json';
@@ -14,6 +13,16 @@ if (location.host !== 'dsp-teamlemon.cloud.dreamfactory.com'){
     requestURL = location.protocol + '//' + location.host +'/rest/db/SRPParagraph';
     requestURL2 = location.protocol + '//' + location.host +'/rest/db/SRPParagraphCommentRelation'
 }
+
+var myApp = angular.module('SRP', []);
+myApp.filter('range', function() {
+    return function(input, total) {
+        total = parseInt(total);
+        for (var i=0; i<total; i++)
+            input.push(i);
+        return input;
+    };
+});
 
 function ParagraphController($scope, $http){
     $scope.init = function(){
@@ -45,6 +54,7 @@ function CommentsController($scope, $http){
     $scope.init = function(){
         $scope.activeComment = null;
         $scope.comment_list = [];
+        $scope.comment_hashmap = {};
         $http({
             method: 'GET',
             url: requestURL2,
@@ -56,32 +66,42 @@ function CommentsController($scope, $http){
             cache: false
         })
             .success(function(data, status, headers, config){
-                var temp = {};
-                console.log(data);
                 for (var i = 0; i < data["record"].length; i ++){
                     var c = data["record"][i]["SRPComments_by_comment_id"];
-                    console.log(c.id, c);
-                    temp[c.id] = c;
+                    $scope.comment_hashmap[c.id] = c;
                     if (c["parent_id"] === null){
                         c.level = 0;
                         $scope.comment_list.push(c);
                     }else{
-                        c.level = temp[c["parent_id"]].level + 1;
-                        var parent_index = $scope.comment_list.indexOf(temp[c["parent_id"]]);
+                        c.level =  $scope.comment_hashmap[c["parent_id"]].level + 1;
+                        var parent_index = $scope.comment_list.indexOf( $scope.comment_hashmap[c["parent_id"]]);
                         $scope.comment_list.splice(parent_index + 1, 0, c);
                     }
 
                 }
-                console.log($scope.comment_list);
             })
             .error(function(){
                 console.log(arguments);
             });
     };
     $scope.addComment = function (newCommentText) {
-        //if (!newCommentText) return;
-        //$scope.comments.push({text: newCommentText, isRemoved: false, active: false});
-        //$scope.newComment = "";
+        if (!newCommentText) return;
+        if ($scope.activeComment){
+            var parent = $scope.comment_hashmap[$scope.activeComment];
+            var parent_index = $scope.comment_list.indexOf(parent);
+        }else{
+            parent = null;
+            parent_index = -2;
+        }
+        var newC = {
+            text: newCommentText,
+            id: null,
+            parent_index: (parent)? parent.id:null,
+            level: (parent)? parent.level+1:0,
+            rate:0
+        };
+        $scope.comment_list.splice(parent_index + 1, 0, newC);
+        $scope.newComment = "";
     };
     $scope.removeComment = function(comment){
         var index = $scope.comments.indexOf(comment);
@@ -93,7 +113,6 @@ function CommentsController($scope, $http){
         }else{
             $scope.activeComment = comment.id;
         }
-        console.log($scope.activeComment,comment);
     };
 
 
