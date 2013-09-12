@@ -20,6 +20,11 @@
         p.active{
             color:blue;
         }
+
+        .list-group-item.level1{
+            padding-left:50px;
+        }
+
     </style>
 </head>
 <body ng-app>
@@ -41,15 +46,12 @@
             <div class="panel-body">
                 <ul class="list-group">
                     <li class="list-group-item"
-                            ng-hide="comments.length"><i>No Comments</i></li>
-                    <li class="list-group-item" ng-repeat="comment in comments">
+                            ng-hide="comment_list.length"><i>No Comments</i></li>
+                    <li class="list-group-item level{{ comment.level }}"
+                        ng-click="active(comment)"
+                        ng-class="{'active' : comment.id == activeComment}"
+                        ng-repeat="comment in comment_list">
                         {{ comment.text }}
-                        <ul class="list-group"
-                            ng-show="comment.comments.length">
-                            <li class="list-group-item" ng-repeat="c2 in comment.comments">
-                                {{ c2.text }}
-                            </li>
-                        </ul>
                     </li>
                 </ul>
                 <form ng-submit="addComment(newComment)">
