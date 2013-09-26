@@ -26,16 +26,13 @@ myApp.filter('range', function() {
     };
 });
 myApp.service('User', function(){
-    this.displayName = function(){
-        return this.display_name;
-    }
+    this.display_name = "kk";
 });
 
 function SessionController($scope, $http, User){
     $scope.init = function(){
         $scope.login_success = false;
         $scope.in_registration = false;
-        $scope.displayUserName = User.displayName;
         $http({
             method: 'GET',
             url: location.protocol + '//' + location.host +'/rest/user/profile',
@@ -44,16 +41,21 @@ function SessionController($scope, $http, User){
         }).success(function(data){
                 console.log(arguments);
                 User = data;
+                $scope.user = data;
                 $scope.login_success = true;
             }).error(function(){
                 console.log(arguments);
             })
     };
+
     $scope.toRegister = function(){
        $scope.in_registration = true;
     };
     $scope.toLogin = function(){
         $scope.in_registration = false;
+    };
+    $scope.logout = function(){
+        //todo
     };
     $scope.submit = function(){
         if ($scope.in_registration){
@@ -72,6 +74,7 @@ function SessionController($scope, $http, User){
                 cache: false
             }).success(function(data){
                     User = data;
+                    $scope.user = User;
                     console.log(arguments);
                     $scope.login_success = true;
                 })
@@ -91,7 +94,8 @@ function SessionController($scope, $http, User){
                 cache: false
             }).success(function(data){
                     User = data;
-                    console.log(arguments);
+                    $scope.user = User;
+                    console.log(arguments,User);
                     $scope.login_success = true;
                 })
                 .error(function(){
@@ -127,7 +131,7 @@ function ParagraphController($scope, $http){
     };
 }
 
-function CommentsController($scope, $http){
+function CommentsController($scope, $http, User){
     $scope.init = function(){
         $scope.activeComment = null;
         $scope.comment_list = [];
@@ -167,6 +171,7 @@ function CommentsController($scope, $http){
     * 2. post a new relation to requestParagraphCommentRelations url
     * */
     $scope.addComment = function (newCommentText) {
+        console.log(User.display_name);
         if (!newCommentText) return;
         if ($scope.activeComment){
             var parent = $scope.comment_hashmap[$scope.activeComment];
@@ -179,6 +184,7 @@ function CommentsController($scope, $http){
             text: newCommentText,
             parent_id: (parent)? parent.id:null,
             level: (parent)? parent.level+1:0,
+            username: User.display_name,
             rate:0
         };
         $http({

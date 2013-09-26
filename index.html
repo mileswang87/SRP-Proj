@@ -24,6 +24,10 @@
             padding: 5px;
         }
 
+        .fr{
+            float:right;
+        }
+
 
 
 
@@ -65,8 +69,14 @@
                         >Back</button>
             </div>
         </form>
-        <div ng-show="login_success">
-            Hello,{{ displayUserName() }}
+        <div class="panel panel-default"
+                ng-show="login_success">
+            <div class="panel-body">
+                Hello, {{ user.display_name }}
+            </div>
+            <div class="panel-body">
+            <button ng-click="logout()" class="btn btn-default">Logout</button>
+            </div>
         </div>
     </div>
     <div class="col-md-10">
@@ -97,6 +107,7 @@
                                 <span class="glyphicon glyphicon-chevron-right  glyphicon-chevron-right"
                                       ng-repeat="n in [] | range:comment.level*2"></span>
                                 {{ comment.text }}
+                                <span class="fr">{{ comment.username || "Unknown" }}</span>
                             </li>
                         </ul>
                         <form ng-submit="addComment(newComment)">
