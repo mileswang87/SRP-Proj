@@ -26,6 +26,34 @@ myApp.filter('range', function() {
     };
 });
 
+function SessionController($scope, $http){
+    $scope.init = function(){
+        $scope.login_success = false;
+        $http({
+            method: 'GET',
+            url: location.protocol + '//' + location.host +'/rest/user/profile',
+            headers:{"X-DreamFactory-Application-Name":"MasterProject"},
+            cache: false
+        }).success(function(){
+                $scope.login_success = true;
+            })
+    };
+    $scope.login = function(){
+        $http({
+            method: 'POST',
+            url: location.protocol + '//' + location.host +'/rest/user/session',
+            headers:{"X-DreamFactory-Application-Name":"MasterProject"},
+            data: {
+                "email":$scope.email,
+                "password":$scope.password
+            },
+            cache: false
+        }).success(function(){
+                $scope.login_success = true;
+            })
+    }
+}
+
 function ParagraphController($scope, $http){
     $scope.init = function(){
         $scope.activePid = null;
@@ -120,6 +148,21 @@ function CommentsController($scope, $http){
                 newC.id = data.record[0].id;
                 $scope.comment_list.splice(parent_index + 1, 0, newC);
                 $scope.newComment = "";
+                $http({
+                    method: 'POST',
+                    url: requestComments,
+                    data: {
+                        "record":newC
+                    },
+                    headers:{"X-DreamFactory-Application-Name":"MasterProject",
+                        "Content-Type":"application/json"},
+                    cache: false
+                }).success(function(){
+                        //todo
+                    }
+                ).error(function(){
+                        console.log(arguments);
+                    });
 
                 //todo update relations
             })
