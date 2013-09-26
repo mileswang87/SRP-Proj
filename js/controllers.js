@@ -202,7 +202,8 @@ function CommentsController($scope, $http, UserService){
         })
             .success(function(data, status, headers, config){
                 newC.id = data.record[0].id;
-
+                $scope.comment_list.splice(parent_index + 1, 0, newC);
+                $scope.newComment = "";
                         console.log(data);
                         $http({
                             method: 'POST',
