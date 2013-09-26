@@ -222,7 +222,7 @@ function CommentsController($scope, $http, UserService){
                             //    "record":newC
                                 "record":{
                                     "paragraph_id":$scope.paragraph.id,
-                                    "comment_id":data.id
+                                    "comment_id":data[0].id
                                 }
                             },
                             headers:{"X-DreamFactory-Application-Name":"MasterProject",
