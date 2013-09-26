@@ -25,8 +25,11 @@ myApp.filter('range', function() {
         return input;
     };
 });
-myApp.service('User', function(){
-    this.display_name = "kk";
+myApp.service('UserService', function(){
+    var userInstance;
+    this.user = function(){
+        return userInstance;
+    }
 });
 
 function SessionController($scope, $http, User){
@@ -40,7 +43,7 @@ function SessionController($scope, $http, User){
             cache: false
         }).success(function(data){
                 console.log(arguments);
-                User = data;
+                User.user = data;
                 $scope.user = data;
                 $scope.login_success = true;
             }).error(function(){
@@ -73,7 +76,7 @@ function SessionController($scope, $http, User){
                 },
                 cache: false
             }).success(function(data){
-                    User = data;
+                    User.user = data;
                     $scope.user = User;
                     console.log(arguments);
                     $scope.login_success = true;
@@ -93,7 +96,7 @@ function SessionController($scope, $http, User){
                 },
                 cache: false
             }).success(function(data){
-                    User = data;
+                    User.user = data;
                     $scope.user = User;
                     console.log(arguments,User);
                     $scope.login_success = true;
@@ -184,7 +187,7 @@ function CommentsController($scope, $http, User){
             text: newCommentText,
             parent_id: (parent)? parent.id:null,
             level: (parent)? parent.level+1:0,
-            username: User.display_name,
+            username: User.user.display_name,
             rate:0
         };
         $http({
@@ -210,7 +213,26 @@ function CommentsController($scope, $http, User){
                     headers:{"X-DreamFactory-Application-Name":"MasterProject",
                         "Content-Type":"application/json"},
                     cache: false
-                }).success(function(){
+                }).success(function(data){
+                        console.log(data);
+                        $http({
+                            method: 'POST',
+                            url: requestURL2,
+                            data: {
+                            //    "record":newC
+                                "record":{
+                                    "paragraph_id":$scope.paragraph.id,
+                                    "comment_id":data.id
+                                }
+                            },
+                            headers:{"X-DreamFactory-Application-Name":"MasterProject",
+                                "Content-Type":"application/json"},
+                            cache: false
+                        }).success(function(){
+                                console.log(arguments);
+                            }).error(function(){
+                                console.log(arguments);
+                            });
                         //todo
                     }
                 ).error(function(){
