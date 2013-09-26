@@ -49,8 +49,12 @@ function SessionController($scope, $http){
             },
             cache: false
         }).success(function(){
+                console.log(arguments);
                 $scope.login_success = true;
             })
+            .error(function(){
+                console.log(arguments);
+            });
     }
 }
 
