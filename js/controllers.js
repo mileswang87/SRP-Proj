@@ -202,27 +202,15 @@ function CommentsController($scope, $http, UserService){
         })
             .success(function(data, status, headers, config){
                 newC.id = data.record[0].id;
-                $scope.comment_list.splice(parent_index + 1, 0, newC);
-                $scope.newComment = "";
-                $http({
-                    method: 'POST',
-                    url: requestComments,
-                    data: {
-                        "record":newC
-                    },
-                    headers:{"X-DreamFactory-Application-Name":"MasterProject",
-                        "Content-Type":"application/json"},
-                    cache: false
-                }).success(function(data){
+
                         console.log(data);
                         $http({
                             method: 'POST',
                             url: requestURL2,
                             data: {
-                            //    "record":newC
                                 "record":{
                                     "paragraph_id":$scope.paragraph.id,
-                                    "comment_id":data[0].id
+                                    "comment_id":newC.id
                                 }
                             },
                             headers:{"X-DreamFactory-Application-Name":"MasterProject",
@@ -232,10 +220,8 @@ function CommentsController($scope, $http, UserService){
                                 console.log(arguments);
                             }).error(function(){
                                 console.log(arguments);
-                            });
-                        //todo
-                    }
-                ).error(function(){
+                            })
+                    .error(function(){
                         console.log(arguments);
                     });
 
