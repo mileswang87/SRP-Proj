@@ -26,12 +26,16 @@ myApp.filter('range', function() {
     };
 });
 myApp.service('User', function(){
+    this.displayName = function(){
+        return this.display_name;
+    }
 });
 
 function SessionController($scope, $http, User){
     $scope.init = function(){
         $scope.login_success = false;
         $scope.in_registration = false;
+        $scope.displayUserName = User.displayName;
         $http({
             method: 'GET',
             url: location.protocol + '//' + location.host +'/rest/user/profile',
