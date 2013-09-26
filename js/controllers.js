@@ -25,8 +25,10 @@ myApp.filter('range', function() {
         return input;
     };
 });
+myApp.service('User', function(){
+});
 
-function SessionController($scope, $http){
+function SessionController($scope, $http, User){
     $scope.init = function(){
         $scope.login_success = false;
         $scope.in_registration = false;
@@ -35,8 +37,9 @@ function SessionController($scope, $http){
             url: location.protocol + '//' + location.host +'/rest/user/profile',
             headers:{"X-DreamFactory-Application-Name":"MasterProject"},
             cache: false
-        }).success(function(){
+        }).success(function(data){
                 console.log(arguments);
+                User = data;
                 $scope.login_success = true;
             }).error(function(){
                 console.log(arguments);
@@ -63,7 +66,8 @@ function SessionController($scope, $http){
                     "first_name":$scope.first_name
                 },
                 cache: false
-            }).success(function(){
+            }).success(function(data){
+                    User = data;
                     console.log(arguments);
                     $scope.login_success = true;
                 })
@@ -81,7 +85,8 @@ function SessionController($scope, $http){
                     "password":$scope.password
                 },
                 cache: false
-            }).success(function(){
+            }).success(function(data){
+                    User = data;
                     console.log(arguments);
                     $scope.login_success = true;
                 })
