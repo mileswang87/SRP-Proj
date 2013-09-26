@@ -12,7 +12,7 @@ if (location.host !== 'dsp-teamlemon.cloud.dreamfactory.com'){
     requestComments = "";
 }else{
     requestURL = location.protocol + '//' + location.host +'/rest/db/SRPParagraph';
-    requestURL2 = location.protocol + '//' + location.host +'/rest/db/SRPParagraphCommentRelation'
+    requestURL2 = location.protocol + '//' + location.host +'/rest/db/SRPParagraphCommentRelation';
     requestComments = location.protocol + '//' + location.host +'/rest/db/SRPComments'
 }
 
@@ -29,33 +29,67 @@ myApp.filter('range', function() {
 function SessionController($scope, $http){
     $scope.init = function(){
         $scope.login_success = false;
+        $scope.in_registration = false;
         $http({
             method: 'GET',
             url: location.protocol + '//' + location.host +'/rest/user/profile',
             headers:{"X-DreamFactory-Application-Name":"MasterProject"},
             cache: false
         }).success(function(){
+                console.log(arguments);
                 $scope.login_success = true;
+            }).error(function(){
+                console.log(arguments);
             })
     };
-    $scope.login = function(){
-        $http({
-            method: 'POST',
-            url: location.protocol + '//' + location.host +'/rest/user/session',
-            headers:{"X-DreamFactory-Application-Name":"MasterProject"},
-            data: {
-                "email":$scope.email,
-                "password":$scope.password
-            },
-            cache: false
-        }).success(function(){
-                console.log(arguments);
-                $scope.login_success = true;
-            })
-            .error(function(){
-                console.log(arguments);
-            });
-    }
+    $scope.toRegister = function(){
+       $scope.in_registration = true;
+    };
+    $scope.toLogin = function(){
+        $scope.in_registration = false;
+    };
+    $scope.submit = function(){
+        if ($scope.in_registration){
+            //do register
+            $http({
+                method: 'POST',
+                url: location.protocol + '//' + location.host +'/rest/user/register',
+                headers:{"X-DreamFactory-Application-Name":"MasterProject"},
+                data: {
+                    "email":$scope.email,
+                    "password":$scope.password,
+                    "display_name":$scope.display_name,
+                    "last_name":$scope.last_name,
+                    "first_name":$scope.first_name
+                },
+                cache: false
+            }).success(function(){
+                    console.log(arguments);
+                    $scope.login_success = true;
+                })
+                .error(function(){
+                    console.log(arguments);
+                });
+        }else{
+            //do login
+            $http({
+                method: 'POST',
+                url: location.protocol + '//' + location.host +'/rest/user/session',
+                headers:{"X-DreamFactory-Application-Name":"MasterProject"},
+                data: {
+                    "email":$scope.email,
+                    "password":$scope.password
+                },
+                cache: false
+            }).success(function(){
+                    console.log(arguments);
+                    $scope.login_success = true;
+                })
+                .error(function(){
+                    console.log(arguments);
+                });
+        }
+    };
 }
 
 function ParagraphController($scope, $http){

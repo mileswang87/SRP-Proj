@@ -31,24 +31,43 @@
 </head>
 <body ng-app="SRP">
 <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-2"
+         ng-controller="SessionController" ng-submit="submit()"
+         ng-init="init()">
         <form class="login-form form-horizontal"
-                ng-controller="SessionController" ng-submit="login">
-            <div class="form-group"
-                    ng-hide="login_success">
+                ng-show="!login_success">
+            <div class="form-group">
             <input type="text" class="form-control input-sm" placeholder="Email" ng-model="email">
 
+            </div>
+            <div
+                    ng-show="in_registration">
+            <div class="form-group">
+                <input type="text" class="form-control input-sm" placeholder="Display Name" ng-model="display_name">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control input-sm" placeholder="First Name" ng-model="first_name">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control input-sm" placeholder="Last Name" ng-model="last_name">
+            </div>
             </div>
             <div class="form-group">
             <input type="password" class="form-control input-sm" placeholder="Password" ng-model="password">
                 </div>
             <div class="form-group">
-                <input type="submit" class="btn btn-default" value="Login">
-            </div>
-            <div ng-show="login_success">
-                Success!
+                <input type="submit" class="btn btn-default" value="Submit">
+                <button ng-click="toRegister()"  class="btn btn-default"
+                        ng-show="!in_registration"
+                        >Register</button>
+                <button ng-click="toLogin()"  class="btn btn-default"
+                        ng-show="in_registration"
+                        >Back</button>
             </div>
         </form>
+        <div ng-show="login_success">
+            Success!
+        </div>
     </div>
     <div class="col-md-10">
         <div class="well"
