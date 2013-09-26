@@ -32,7 +32,7 @@ myApp.service('UserService', function(){
     }
 });
 
-function SessionController($scope, $http, User){
+function SessionController($scope, $http, UserService){
     $scope.init = function(){
         $scope.login_success = false;
         $scope.in_registration = false;
@@ -43,7 +43,7 @@ function SessionController($scope, $http, User){
             cache: false
         }).success(function(data){
                 console.log(arguments);
-                User.user = data;
+                UserService.user = data;
                 $scope.user = data;
                 $scope.login_success = true;
             }).error(function(){
@@ -76,8 +76,8 @@ function SessionController($scope, $http, User){
                 },
                 cache: false
             }).success(function(data){
-                    User.user = data;
-                    $scope.user = User;
+                    UserService.user = data;
+                    $scope.user = data;
                     console.log(arguments);
                     $scope.login_success = true;
                 })
@@ -96,9 +96,9 @@ function SessionController($scope, $http, User){
                 },
                 cache: false
             }).success(function(data){
-                    User.user = data;
-                    $scope.user = User;
-                    console.log(arguments,User);
+                    UserService.user = data;
+                    $scope.user = UserService;
+                    console.log(arguments,UserService);
                     $scope.login_success = true;
                 })
                 .error(function(){
@@ -134,7 +134,7 @@ function ParagraphController($scope, $http){
     };
 }
 
-function CommentsController($scope, $http, User){
+function CommentsController($scope, $http, UserService){
     $scope.init = function(){
         $scope.activeComment = null;
         $scope.comment_list = [];
@@ -174,7 +174,7 @@ function CommentsController($scope, $http, User){
     * 2. post a new relation to requestParagraphCommentRelations url
     * */
     $scope.addComment = function (newCommentText) {
-        console.log(User.display_name);
+        console.log(UserService.user.display_name);
         if (!newCommentText) return;
         if ($scope.activeComment){
             var parent = $scope.comment_hashmap[$scope.activeComment];
@@ -187,7 +187,7 @@ function CommentsController($scope, $http, User){
             text: newCommentText,
             parent_id: (parent)? parent.id:null,
             level: (parent)? parent.level+1:0,
-            username: User.user.display_name,
+            username: UserService.user.display_name,
             rate:0
         };
         $http({
