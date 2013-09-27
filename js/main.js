@@ -54,7 +54,23 @@
             }
 
         };
-    }]).service('UserService', UserClass);
+    }]);
+    app.service('UserService', UserClass);
+    app.directive('compileContent', ['$compile',
+        function ($compile) {
+            return function (scope, element, attrs) {
+                scope.$watch(
+                    function (scope) {
+                        return scope.$eval(attrs.compileContent);
+                    },
+                    function (value) {
+                        element.html(value);
+                        $compile(element.contents())(scope);
+                    }
+                );
+            };
+        }
+        ]);
 
     /* controllers */
     /* SessionController, will handle user login/logout */
@@ -97,21 +113,29 @@
         $scope.toggle = function (p) {
             p.actived = !p.actived;
         };
-        $scope.toggleAll = function (p) {
+        $scope.toggleAll = function (setting) {
             var i;
             for (i = 0; i < $scope.paragraphs.length; i++) {
-                $scope.paragraphs[i].actived = true;
+                $scope.paragraphs[i].actived = setting;
             }
+        };
+        $scope.activeAll = function () {
+            $scope.toggleAll(true);
+        };
+        $scope.closeAll = function () {
+            $scope.toggleAll(false);
         };
     }
 
     /* CommentController */
     /** @namespace $scope.paragraph */
-    function CommentController($scope, REST, UserService) {
+    function CommentController($scope, $compile, REST, UserService) {
         var params;
         $scope.activeComment = null;
+        $scope.newCommentHtml = '<form ng-submit="addComment(newComment)"><label> Input:<br><textarea rows="5" cols="80" ng-model="newComment"></textarea><input type="submit" class="btn btn-default" value="Submit"/></label></form>';
+
         $scope.comment_list = [];
-        $scope.comment_list.push({text: "Topic", level: "0", id: 0});
+        $scope.comment_list.push({text: "Topic", level: 0, id: 0});
         params = {
             "filter": "Path like '" + $scope.paragraph.id + "\\|%'"
         };
@@ -125,20 +149,25 @@
             }
         });
         /* set comment to active */
-        $scope.active = function(comment) {
+        $scope.active = function (comment) {
             if ($scope.activeComment === comment.id) {
                 $scope.activeComment = null;
-            }else{
+            } else {
                 $scope.activeComment = comment.id;
+                $compile($scope.newCommentHtml)($scope);
             }
-        }
+        };
+        $scope.addComment = function (newCommentText) {
+            console.log(arguments);
+            if (newCommentText) {
+                $scope.newComment = "";
+            }
+        };
     }
-
 
     app.controller("SessionController", SessionController);
     app.controller("ParagraphController", ParagraphController);
     app.controller("CommentController", CommentController);
-
 }());
 
 

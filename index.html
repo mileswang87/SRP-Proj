@@ -91,8 +91,12 @@
             <div class="panel-heading">
                 <label>Content:</label>
                 <button class="btn btn-default btn-sm fr"
-                        ng-click="toggleAll()"
+                        ng-click="closeAll()"
+                        >Collapse All</button>
+                <button class="btn btn-default btn-sm fr"
+                        ng-click="activeAll()"
                         >Expand All</button>
+
             </div>
             <div class="panel-body">
                 <div ng-repeat="paragraph in paragraphs">
@@ -111,14 +115,14 @@
                                 <li class="list-group-item"
                                     ng-hide="comment_list.length"><i>No Comments</i></li>
                                 <li class="list-group-item level{{ comment.level }}"
-                                    ng-click="active(comment)"
                                     ng-class="{'active' : comment.id == activeComment}"
                                     ng-repeat="comment in comment_list">
                                     <!--<span class="glyphicon glyphicon-chevron-right  glyphicon-chevron-right"-->
                                     <!--ng-repeat="n in [] | range:comment.level*2"></span>-->
                                     <i>Level {{ comment.level }}:</i>
-                                    {{ comment.text }}
+                                    <span ng-click="active(comment)">{{ comment.text }}</span>
                                     <span class="fr">{{ comment.username }}</span>
+                                    <div compile-content="(comment.id == activeComment)&&newCommentHtml||''"></div>
                                 </li>
                             </ul>
                             <form ng-submit="addComment(newComment)"
