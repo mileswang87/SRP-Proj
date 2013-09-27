@@ -6,14 +6,16 @@
  */
 
 /* Set up localhost debug request */
-if (location.host !== 'dsp-teamlemon.cloud.dreamfactory.com'){
-    requestURL = 'paragraphs.json';
-    requestURL2 = "ParagraphCommentRelation.json";
-    requestComments = "";
+base = "https://dsp-teamlemon.cloud.dreamfactory.com";
+
+if (location.host !== 'dsp-teamlemon.cloud.dreamfactory.com' && false){
+//    requestURL = 'paragraphs.json';
+//    requestURL2 = "ParagraphCommentRelation.json";
+//    requestComments = "";
 }else{
-    requestURL = location.protocol + '//' + location.host +'/rest/db/SRPParagraph';
-    requestURL2 = location.protocol + '//' + location.host +'/rest/db/SRPParagraphCommentRelation';
-    requestComments = location.protocol + '//' + location.host +'/rest/db/SRPComments'
+    requestURL = base +'/rest/db/SRPParagraph';
+    requestURL2 = base +'/rest/db/SRPParagraphCommentRelation';
+    requestComments = base +'/rest/db/SRPComments';
 }
 
 var myApp = angular.module('SRP', []);
