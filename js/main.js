@@ -142,20 +142,35 @@
         $scope.newCommentHtml = '<form ng-submit="addComment(newComment)"><label> Input:<br><textarea rows="5" cols="80" ng-model="newComment"></textarea><input type="submit" class="btn btn-default" value="Submit"/></label></form>';
 
         $scope.comment_list = [];
-        $scope.comment_list.push({text: "Topic", level: 0, id: "p" + $scope.paragraph.id, path: "", top: true});
+        $scope.comment_list.push({text: "Topic", level: 0, id: "p" + $scope.paragraph.id, path: "", real_path: [], top: true});
         params = {
             "filter": "Path like '" + $scope.paragraph.id + "\\|%'"
         };
+
+        function insertPosition(comment, parent_id) {
+            var i,
+                insert_position = 0;
+            for (i = 0; i < $scope.comment_list.length; i++) {
+                if ($scope.comment_list[i].real_path.indexOf(parent_id) !== -1) {
+                    //find insert position
+                    insert_position = i;
+                }
+            }
+            return insert_position + 1;
+        }
+
         /** @namespace data.record */
         REST.ajaxGet("/db/SRPComments", params, function (data) {
-            var i, comment;
+            var i, comment, ip, p;
             for (i = 0; i < data.record.length; i++) {
                 comment = data.record[i];
                 //comment.path = data.record[i].path.split("|").slice(0, -1);
-                comment.level = data.record[i].path.split("|").slice(0, -1).length;
+                comment.real_path = data.record[i].path.split("|").slice(0, -1);
+                comment.level = comment.real_path.length;
                 comment.top = false;
                 console.log(comment);
-                $scope.comment_list.push(comment);
+                ip = insertPosition(comment, comment.real_path[comment.real_path.length - 1]);
+                $scope.comment_list.splice(ip, 0, comment);
             }
         });
         /* set comment to active */
@@ -173,12 +188,15 @@
                 index,
                 position = 0,
                 i,
+                ip,
                 parent = null;
 
             if (newCommentText) {
                 $scope.newComment = "";
                 newComment.text = newCommentText;
-                for (i = 0; i < $scope.comment_list.length; i++) {
+                newComment.username = UserService.user.username;
+
+                for (i = 0; i < $scope.comment_list.length && parent === null; i++) {
                     if ($scope.comment_list[i].id === $scope.activeComment) {
                         //find parent
                         index = i;
@@ -195,16 +213,26 @@
                             newComment.path = parent.path + parent.id + "|";
                         }
                     }
-                    if (parent !== null && newComment.path.indexOf($scope.comment_list[i].path) !== -1) {
-                        //find insert position
-                        position = i;
-                    }
+                }
+
+                ip = insertPosition(newComment, $scope.activeComment);
+
+
+                if (parent.top) {
+                    //add a top level comment
+                    newComment.level = 1;
+                    console.log(parent.id.substr(1));
+                    newComment.path = parent.id.substr(1) + "|";
+                } else {
+                    //add a non-top level comment
+                    newComment.level = parent.level + 1;
+                    newComment.path = parent.path + parent.id + "|";
                 }
                 position++;
                 REST.ajaxPost(
                     '/db/SRPComments',
                     newComment,
-                    function(data, status, headers, config) {
+                    function (data, status, headers, config) {
                         newComment.id = data.record[0].id;
                         $scope.comment_list.splice(position, 0, newComment);
                     }
