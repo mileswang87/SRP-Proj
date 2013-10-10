@@ -194,7 +194,8 @@
             if (newCommentText) {
                 $scope.newComment = "";
                 newComment.text = newCommentText;
-                newComment.username = UserService.user.username;
+                newComment.username = UserService.user.display_name;
+                console.log(UserService.user);
 
                 for (i = 0; i < $scope.comment_list.length && parent === null; i++) {
                     if ($scope.comment_list[i].id === $scope.activeComment) {
@@ -232,8 +233,8 @@
                 REST.ajaxPost(
                     '/db/SRPComments',
                     newComment,
-                    function (data, status, headers, config) {
-                        newComment.id = data.record[0].id;
+                    function (data) {
+                        newComment.id = data.id;
                         $scope.comment_list.splice(position, 0, newComment);
                     }
                 );
