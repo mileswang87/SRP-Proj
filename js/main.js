@@ -156,13 +156,15 @@
 
         function insertPosition(parent_id) {
             var i,
-                insert_position = $scope.comment_list.length - 1;
+                insert_position = 0;
             for (i = 0; i < $scope.comment_list.length; i++) {
                 if ($scope.comment_list[i].id === parent_id || $scope.comment_list[i].real_path.indexOf(parent_id) !== -1) {
                     //find insert position
                     insert_position = i;
                 }
             }
+            if (insert_position === 0)
+                insert_position = $scope.comment_list.length - 1;
             return insert_position + 1;
         }
 
