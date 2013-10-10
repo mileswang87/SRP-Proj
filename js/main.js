@@ -193,8 +193,7 @@
 
             if (newCommentText) {
                 $scope.newComment = "";
-                newCommentText = "";
-                newComment.text = newCommentText;
+                    newComment.text = newCommentText;
                 newComment.username = UserService.user.display_name;
                 console.log(UserService.user);
 
