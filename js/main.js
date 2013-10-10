@@ -12,6 +12,11 @@
     /* classes */
     function UserClass() {
         this.display_name = "Guest";
+        this.loggedIn = false;
+        this.reset = function () {
+            this.display_name = "Guest";
+            this.loggedIn = false;
+        }
     }
 
     /* init App */
@@ -83,11 +88,12 @@
         $scope.userService = UserService;
         function login_success(data) {
             console.log(data);
-            UserService.user = data;
+            UserService.display_name = data.display_name;
+            UserService.loggedIn = true;
             $scope.loggedIn = true;
         }
         function logout_success() {
-            UserService.user = null;
+            UserService.reset();
             $scope.loggedIn = false;
         }
         REST.ajaxGet('/user/profile', {}, login_success);
@@ -138,6 +144,7 @@
     /** @namespace $scope.paragraph */
     function CommentController($scope, REST, UserService) {
         var params;
+        $scope.userService = UserService;
         $scope.activeComment = null;
         $scope.newCommentHtml = '<form ng-submit="addComment(newComment)"><label> Input:<br><textarea rows="5" cols="80" ng-model="newComment"></textarea><input type="submit" class="btn btn-default" value="Submit"/></label></form>';
 
@@ -194,7 +201,7 @@
             if (newCommentText) {
                 $scope.newComment = "";
                 newComment.text = newCommentText;
-                newComment.username = UserService.user.display_name;
+                newComment.username = UserService.display_name;
                 console.log(UserService.user);
 
                 for (i = 0; i < $scope.comment_list.length && parent === null; i++) {

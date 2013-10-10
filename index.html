@@ -78,7 +78,7 @@
         <div class="panel panel-default"
                 ng-show="loggedIn">
             <div class="panel-body">
-                Hello, {{ userService.user.display_name }}
+                Hello, {{ userService.display_name }}
             </div>
             <div class="panel-body">
             <button ng-click="logout()" class="btn btn-default">Logout</button>
@@ -122,7 +122,7 @@
                                     <i ng-show="comment.level > 0">Level {{ comment.level }}:</i>
                                     <span ng-click="active(comment)">{{ comment.text }}</span>
                                     <span class="fr">{{ comment.username }}</span>
-                                    <div compile-content="(comment.id == activeComment && loggedIn)&&newCommentHtml||''"></div>
+                                    <div compile-content="(comment.id == activeComment && userService.loggedIn)&&newCommentHtml||''"></div>
                                 </li>
                             </ul>
                             <form ng-submit="addComment(newComment)"
