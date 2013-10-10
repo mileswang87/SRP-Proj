@@ -16,7 +16,7 @@
         this.reset = function () {
             this.display_name = "Guest";
             this.loggedIn = false;
-        }
+        };
     }
 
     /* init App */
@@ -154,9 +154,9 @@
             "filter": "Path like '" + $scope.paragraph.id + "\\|%'"
         };
 
-        function insertPosition(comment, parent_id) {
+        function insertPosition(parent_id) {
             var i,
-                insert_position = 0;
+                insert_position = $scope.comment_list.length - 1;
             for (i = 0; i < $scope.comment_list.length; i++) {
                 if ($scope.comment_list[i].id === parent_id || $scope.comment_list[i].real_path.indexOf(parent_id) !== -1) {
                     //find insert position
@@ -168,7 +168,7 @@
 
         /** @namespace data.record */
         REST.ajaxGet("/db/SRPComments", params, function (data) {
-            var i, comment, ip, p;
+            var i, comment, ip;
             for (i = 0; i < data.record.length; i++) {
                 comment = data.record[i];
                 //comment.path = data.record[i].path.split("|").slice(0, -1);
@@ -176,7 +176,7 @@
                 comment.level = comment.real_path.length;
                 comment.top = false;
                 console.log(comment);
-                ip = insertPosition(comment, comment.real_path[comment.real_path.length - 1]);
+                ip = insertPosition(comment.real_path[comment.real_path.length - 1]);
                 $scope.comment_list.splice(ip, 0, comment);
             }
         });
@@ -202,7 +202,6 @@
                 $scope.newComment = "";
                 newComment.text = newCommentText;
                 newComment.username = UserService.display_name;
-                console.log(UserService.user);
 
                 for (i = 0; i < $scope.comment_list.length && parent === null; i++) {
                     if ($scope.comment_list[i].id === $scope.activeComment) {
@@ -223,7 +222,7 @@
                     }
                 }
 
-                ip = insertPosition(newComment, $scope.activeComment);
+                ip = insertPosition($scope.activeComment);
 
 
                 if (parent.top) {
