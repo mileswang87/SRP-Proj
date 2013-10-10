@@ -193,7 +193,7 @@
 
             if (newCommentText) {
                 $scope.newComment = "";
-                    newComment.text = newCommentText;
+                newComment.text = newCommentText;
                 newComment.username = UserService.user.display_name;
                 console.log(UserService.user);
 
@@ -229,13 +229,12 @@
                     newComment.level = parent.level + 1;
                     newComment.path = parent.path + parent.id + "|";
                 }
-                position++;
                 REST.ajaxPost(
                     '/db/SRPComments',
                     newComment,
                     function (data) {
                         newComment.id = data.id;
-                        $scope.comment_list.splice(position, 0, newComment);
+                        $scope.comment_list.splice(ip, 0, newComment);
                         $scope.activeComment = null;
                     }
                 );
