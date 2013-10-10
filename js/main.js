@@ -193,6 +193,7 @@
 
             if (newCommentText) {
                 $scope.newComment = "";
+                newCommentText = "";
                 newComment.text = newCommentText;
                 newComment.username = UserService.user.display_name;
                 console.log(UserService.user);
@@ -236,6 +237,7 @@
                     function (data) {
                         newComment.id = data.id;
                         $scope.comment_list.splice(position, 0, newComment);
+                        $scope.activeComment = null;
                     }
                 );
                 console.log(position);
