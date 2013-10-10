@@ -149,7 +149,7 @@
         $scope.newCommentHtml = '<form ng-submit="addComment(newComment)"><label> Input:<br><textarea rows="5" cols="80" ng-model="newComment"></textarea><input type="submit" class="btn btn-default" value="Submit"/></label></form>';
 
         $scope.comment_list = [];
-        $scope.comment_list.push({text: "Add comment to this paragraph.", level: 0, id: "p" + $scope.paragraph.id, path: "", real_path: [], top: true});
+        $scope.comment_list.push({text: "<<Add comment to this paragraph>>", level: 0, id: "p" + $scope.paragraph.id, path: "", real_path: [], top: true});
         params = {
             "filter": "Path like '" + $scope.paragraph.id + "\\|%'"
         };
