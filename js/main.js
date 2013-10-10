@@ -51,6 +51,9 @@
             },
             ajaxPost: function (service, data, success) {
                 return this.ajax("POST", service, data, success);
+            },
+            ajaxDelete: function (service, data, success) {
+                return this.ajax("DELETE", service, data, success);
             }
 
         };
@@ -101,7 +104,7 @@
             $scope.in_registration = false;
         };
         $scope.logout = function () {
-            //todo
+            REST.ajaxDelete('/user/profile', {}, login_success);
         };
     }
 
