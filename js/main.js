@@ -86,6 +86,10 @@
             UserService.user = data;
             $scope.loggedIn = true;
         }
+        function logout_success() {
+            UserService.user = null;
+            $scope.loggedIn = false;
+        }
         REST.ajaxGet('/user/profile', {}, login_success);
         $scope.login = function () {
             REST.ajaxPost(
@@ -104,7 +108,7 @@
             $scope.in_registration = false;
         };
         $scope.logout = function () {
-            REST.ajaxDelete('/user/profile', {}, login_success);
+            REST.ajaxDelete('/user/session', {}, logout_success);
         };
     }
 
@@ -132,23 +136,26 @@
 
     /* CommentController */
     /** @namespace $scope.paragraph */
-    function CommentController($scope, $compile, REST, UserService) {
+    function CommentController($scope, REST, UserService) {
         var params;
         $scope.activeComment = null;
         $scope.newCommentHtml = '<form ng-submit="addComment(newComment)"><label> Input:<br><textarea rows="5" cols="80" ng-model="newComment"></textarea><input type="submit" class="btn btn-default" value="Submit"/></label></form>';
 
         $scope.comment_list = [];
-        $scope.comment_list.push({text: "Topic", level: 0, id: 0});
+        $scope.comment_list.push({text: "Topic", level: 0, id: "p" + $scope.paragraph.id, path: "", top: true});
         params = {
             "filter": "Path like '" + $scope.paragraph.id + "\\|%'"
         };
+        /** @namespace data.record */
         REST.ajaxGet("/db/SRPComments", params, function (data) {
             var i, comment;
             for (i = 0; i < data.record.length; i++) {
                 comment = data.record[i];
-                comment.path = data.record[i].path.split("|").slice(0, -1);
-                comment.level = comment.path.length;
-                $scope.comment_list.push(data.record[i]);
+                //comment.path = data.record[i].path.split("|").slice(0, -1);
+                comment.level = data.record[i].path.split("|").slice(0, -1).length;
+                comment.top = false;
+                console.log(comment);
+                $scope.comment_list.push(comment);
             }
         });
         /* set comment to active */
@@ -157,13 +164,53 @@
                 $scope.activeComment = null;
             } else {
                 $scope.activeComment = comment.id;
-                $compile($scope.newCommentHtml)($scope);
+               // $compile($scope.newCommentHtml)($scope);
             }
         };
         $scope.addComment = function (newCommentText) {
             console.log(arguments);
+            var newComment = {},
+                index,
+                position = 0,
+                i,
+                parent = null;
+
             if (newCommentText) {
                 $scope.newComment = "";
+                newComment.text = newCommentText;
+                for (i = 0; i < $scope.comment_list.length; i++) {
+                    if ($scope.comment_list[i].id === $scope.activeComment) {
+                        //find parent
+                        index = i;
+                        position = index;
+                        parent = $scope.comment_list[index];
+                        if (parent.top) {
+                            //add a top level comment
+                            newComment.level = 1;
+                            console.log(parent.id.substr(1));
+                            newComment.path = parent.id.substr(1) + "|";
+                        } else {
+                            //add a non-top level comment
+                            newComment.level = parent.level + 1;
+                            newComment.path = parent.path + parent.id + "|";
+                        }
+                    }
+                    if (parent !== null && newComment.path.indexOf($scope.comment_list[i].path) !== -1) {
+                        //find insert position
+                        position = i;
+                    }
+                }
+                position++;
+                REST.ajaxPost(
+                    '/db/SRPComments',
+                    newComment,
+                    function(data, status, headers, config) {
+                        newComment.id = data.record[0].id;
+                        $scope.comment_list.splice(position, 0, newComment);
+                    }
+                );
+                console.log(position);
+                console.log($scope.comment_list);
             }
         };
     }
