@@ -5,8 +5,7 @@
     <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet"/>
     <style>
         body {
-            margin: auto;
-            width: 960px;
+            margin-top: 30px;
         }
 
         p.hoverable {
@@ -34,6 +33,7 @@
     </style>
 </head>
 <body ng-app="srp-app">
+<div class="container">
 <div class="row">
     <div class="col-md-2"
          ng-controller="SessionController">
@@ -119,7 +119,7 @@
                                     ng-repeat="comment in comment_list">
                                     <!--<span class="glyphicon glyphicon-chevron-right  glyphicon-chevron-right"-->
                                     <!--ng-repeat="n in [] | range:comment.level*2"></span>-->
-                                    <i>Level {{ comment.level }}:</i>
+                                    <i ng-show="comment.level > 0">Level {{ comment.level }}:</i>
                                     <span ng-click="active(comment)">{{ comment.text }}</span>
                                     <span class="fr">{{ comment.username }}</span>
                                     <div compile-content="(comment.id == activeComment)&&newCommentHtml||''"></div>
@@ -138,6 +138,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <script src="angular.js"></script>
