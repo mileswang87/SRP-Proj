@@ -151,7 +151,7 @@
             var i,
                 insert_position = 0;
             for (i = 0; i < $scope.comment_list.length; i++) {
-                if ($scope.comment_list[i].real_path.indexOf(parent_id) !== -1) {
+                if ($scope.comment_list[i].id === parent_id || $scope.comment_list[i].real_path.indexOf(parent_id) !== -1) {
                     //find insert position
                     insert_position = i;
                 }
