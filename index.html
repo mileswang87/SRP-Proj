@@ -27,6 +27,29 @@
             float:right;
         }
 
+        .level2{
+            padding-left: 30px;
+            font-size:80%;
+        }
+        .level3{
+            padding-left: 60px;
+            font-size:80%;
+        }
+        .level4{
+            padding-left: 90px;
+            font-size:80%;
+        }
+        .level5{
+            padding-left: 120px;
+            font-size:80%;
+        }
+        .level6{
+            padding-left: 150px;
+            font-size:80%;
+        }
+
+
+
 
 
 
@@ -119,10 +142,10 @@
                                     ng-repeat="comment in comment_list">
                                     <!--<span class="glyphicon glyphicon-chevron-right  glyphicon-chevron-right"-->
                                     <!--ng-repeat="n in [] | range:comment.level*2"></span>-->
-                                    <i ng-show="comment.level > 0">Level {{ comment.level }}:</i>
+                                    <!--<i ng-show="comment.level > 0">Level {{ comment.level }}:</i>-->
                                     <span ng-click="active(comment)">{{ comment.text }}</span>
                                     <span class="fr">{{ comment.username }}</span>
-                                    <div compile-content="(comment.id == activeComment && userService.loggedIn)&&newCommentHtml||''"></div>
+                                    <div compile-content="(userService.loggedIn && comment.id == activeComment && comment.level <= 5 )&&newCommentHtml||''"></div>
                                 </li>
                             </ul>
                             <form ng-submit="addComment(newComment)"

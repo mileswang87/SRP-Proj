@@ -237,6 +237,7 @@
                     newComment.level = parent.level + 1;
                     newComment.path = parent.path + parent.id + "|";
                 }
+                newComment.real_path = newComment.path.split("|").slice(0, -1);
                 REST.ajaxPost(
                     '/db/SRPComments',
                     newComment,
