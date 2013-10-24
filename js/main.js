@@ -192,7 +192,7 @@
                 comment.level = comment.real_path.length;
                 comment.create_time_text = new Date((new Date(comment.create_time) - 60000 * timeOffset)).toLocaleString();
                 comment.top = false;
-                comment.voted = false;
+                comment.voted = comment.vote > 0;
                 console.log(comment);
                 ip = insertPosition(comment.real_path[comment.real_path.length - 1]);
                 $scope.comment_list.splice(ip, 0, comment);
