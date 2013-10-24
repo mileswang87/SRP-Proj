@@ -176,6 +176,7 @@
                 //comment.path = data.record[i].path.split("|").slice(0, -1);
                 comment.real_path = data.record[i].path.split("|").slice(0, -1);
                 comment.level = comment.real_path.length;
+                comment.create_time = new Date(comment.create_time);
                 comment.top = false;
                 console.log(comment);
                 ip = insertPosition(comment.real_path[comment.real_path.length - 1]);
@@ -204,7 +205,7 @@
             if (newCommentText) {
                 $scope.newComment = "";
                 newComment.text = newCommentText;
-                newComment.create_time = date.toUTCString();
+                newComment.create_time = date.toJSON();
                 newComment.username = UserService.display_name;
 
                 for (i = 0; i < $scope.comment_list.length && parent === null; i++) {
