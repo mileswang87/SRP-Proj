@@ -217,7 +217,7 @@
             if (newCommentText) {
                 $scope.newComment = "";
                 newComment.text = newCommentText;
-                newComment.type = parseInt(type, 10);
+                newComment.type = type;
                 newComment.create_time = date.toJSON();
                 newComment.create_time_text = date.toUTCString();
                 newComment.username = UserService.display_name;
@@ -280,6 +280,9 @@
          * @return {string}
          */
         function CommentTypeFilter(comment_type) {
+            if (typeof comment_type === "string") {
+                comment_type = parseInt(comment_type, 10);
+            }
             switch (comment_type) {
             case 0:
                 return "Comment";
