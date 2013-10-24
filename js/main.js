@@ -150,6 +150,7 @@
         $scope.activeComment = null;
         $scope.newCommentType = 0;
         $scope.newCommentHtml = '<form ng-submit="addComment(newComment, newCommentType)">' +
+            '<div ng-show="comment.level > 0" style="margin: 10px 0;"><b>Reply to this Comment</b></div>' +
             '<label>Type:</label>' +
             '</label><select class="form-control" ng-model="$parent.newCommentType">' +
             '<option value="0">Comment</option>' +
