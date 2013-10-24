@@ -81,6 +81,13 @@
             width: 25px;
         }
 
+        .w80{
+            width: 89%;
+        }
+        .w20{
+            width: 10%;
+        }
+
     </style>
 </head>
 <body ng-app="srp-app">
@@ -171,16 +178,17 @@
                                     <!--<span class="glyphicon glyphicon-chevron-right  glyphicon-chevron-right"-->
                                     <!--ng-repeat="n in [] | range:comment.level*2"></span>-->
                                     <!--<i ng-show="comment.level > 0">Level {{ comment.level }}:</i>-->
-                                    <div class="ib btn-group" ng-show="comment.level > 0">
+                                    <div class="ib w20 btn-group" ng-show="comment.level > 0">
                                         <button class="btn btn-xs btn-primary" ng-class="comment.voted && 'disabled'" ng-click="voteUp(comment)"> <span class="glyphicon glyphicon-arrow-up"></span></button>
                                         <span class="votes disabled btn btn-xs btn-default">{{ comment.vote }}</span>
                                         <button class="btn btn-xs btn-primary" ng-class="comment.voted && 'disabled'"  ng-click="voteDown(comment)"><span class="glyphicon glyphicon-arrow-down"></span></button>
                                     </div>
-
+                                    <div class="ib w80" ng-click="active(comment)">
                                     <span class="type" ng-show="comment.level > 0">{{ comment.type|toCommentType }}:</span>
-                                    <span ng-click="active(comment)">{{ comment.text }}</span>
+                                    <span >{{ comment.text }}</span>
                                     <span class="fr f10">{{ comment.username }}</span>
                                     <span class="fr time f10">{{ comment.create_time_text }}</span>
+                                    </div>
                                     <div compile-content="(userService.loggedIn && comment.id == activeComment && comment.level <= 5 )&&newCommentHtml||''"></div>
                                 </li>
                             </ul>

@@ -20,6 +20,8 @@
     }
 
     /* init App */
+    var timeOffset = new Date().getTimezoneOffset();
+
     var app = angular.module("srp-app", []);
     app.factory("REST", ['$http', function ($http) {
         return {
@@ -187,7 +189,7 @@
                 //comment.path = data.record[i].path.split("|").slice(0, -1);
                 comment.real_path = data.record[i].path.split("|").slice(0, -1);
                 comment.level = comment.real_path.length;
-                comment.create_time_text = new Date(comment.create_time).toUTCString();
+                comment.create_time_text = new Date((new Date(comment.create_time) - 60000 * timeOffset)).toLocaleString();
                 comment.top = false;
                 comment.voted = false;
                 console.log(comment);
@@ -232,7 +234,7 @@
                 newComment.vote = 0;
                 newComment.type = type;
                 newComment.create_time = date.toJSON();
-                newComment.create_time_text = date.toUTCString();
+                newComment.create_time_text = new Date((date - 60000 * timeOffset)).toLocaleString();
                 newComment.username = UserService.display_name;
 
                 for (i = 0; i < $scope.comment_list.length && parent === null; i++) {
@@ -316,6 +318,8 @@
     app.controller("ParagraphController", ParagraphController);
     app.controller("CommentController", CommentController);
     app.filter("toCommentType", toCommentType);
+
+
 }());
 
 
