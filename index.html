@@ -28,23 +28,23 @@
         }
 
         .level2{
-            padding-left: 30px;
+            margin-left: 30px;
             font-size:80%;
         }
         .level3{
-            padding-left: 60px;
+            margin-left: 60px;
             font-size:80%;
         }
         .level4{
-            padding-left: 90px;
+            margin-left: 90px;
             font-size:80%;
         }
         .level5{
-            padding-left: 120px;
+            margin-left: 120px;
             font-size:80%;
         }
         .level6{
-            padding-left: 150px;
+            margin-left: 150px;
             font-size:80%;
         }
 
@@ -58,6 +58,10 @@
         }
         .type{
             color:red;
+        }
+
+        .f10{
+            font-size: 10px;
         }
 
         .w100{
@@ -154,10 +158,10 @@
                                     <!--<span class="glyphicon glyphicon-chevron-right  glyphicon-chevron-right"-->
                                     <!--ng-repeat="n in [] | range:comment.level*2"></span>-->
                                     <!--<i ng-show="comment.level > 0">Level {{ comment.level }}:</i>-->
-                                    <span class="type">{{ comment.type|toCommentType }}:</span>
+                                    <span class="type" ng-show="comment.level > 0">{{ comment.type|toCommentType }}:</span>
                                     <span ng-click="active(comment)">{{ comment.text }}</span>
-                                    <span class="fr">{{ comment.username }}</span>
-                                    <span class="fr time">{{ comment.create_time_text }}</span>
+                                    <span class="fr f10">{{ comment.username }}</span>
+                                    <span class="fr time f10">{{ comment.create_time_text }}</span>
                                     <div compile-content="(userService.loggedIn && comment.id == activeComment && comment.level <= 5 )&&newCommentHtml||''"></div>
                                 </li>
                             </ul>
