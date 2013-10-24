@@ -56,6 +56,13 @@
             font-size:10px;
             margin: 0 50px;
         }
+        .type{
+            color:red;
+        }
+
+        .w100{
+            width: 100%;
+        }
 
     </style>
 </head>
@@ -147,9 +154,10 @@
                                     <!--<span class="glyphicon glyphicon-chevron-right  glyphicon-chevron-right"-->
                                     <!--ng-repeat="n in [] | range:comment.level*2"></span>-->
                                     <!--<i ng-show="comment.level > 0">Level {{ comment.level }}:</i>-->
+                                    <span class="type">{{ comment.type|toCommentType }}:</span>
                                     <span ng-click="active(comment)">{{ comment.text }}</span>
                                     <span class="fr">{{ comment.username }}</span>
-                                    <span class="fr time">{{ comment.create_time.toUTCString() }}</span>
+                                    <span class="fr time">{{ comment.create_time_text }}</span>
                                     <div compile-content="(userService.loggedIn && comment.id == activeComment && comment.level <= 5 )&&newCommentHtml||''"></div>
                                 </li>
                             </ul>

@@ -146,7 +146,17 @@
         var params;
         $scope.userService = UserService;
         $scope.activeComment = null;
-        $scope.newCommentHtml = '<form ng-submit="addComment(newComment)"><label> Input:<br><textarea rows="5" cols="80" ng-model="newComment"></textarea><input type="submit" class="btn btn-default" value="Submit"/></label></form>';
+        $scope.newCommentType = 0;
+        $scope.newCommentHtml = '<form ng-submit="addComment(newComment, commentType)">' +
+            '<label>Type:</label>' +
+            '</label><select ng-model="$parent.newCommentType">' +
+            '<option value="0">Comment</option>' +
+            '<option value="1">Question</option>' +
+            '<option value="2">Answer</option>' +
+            '<option value="3">Other</option>' +
+            '</select>' +
+            '<label class="w100"> Input:<br><textarea rows="5" class="w100" ng-model="$parent.newComment"></textarea></label>' +
+            '<input type="submit" class="btn btn-block btn-default" value="Submit"/></form>';
 
         $scope.comment_list = [];
         $scope.comment_list.push({text: "<<Add comment to this paragraph>>", level: 0, id: "p" + $scope.paragraph.id, path: "", real_path: [], top: true});
@@ -163,8 +173,9 @@
                     insert_position = i;
                 }
             }
-            if (insert_position === 0)
+            if (insert_position === 0) {
                 insert_position = $scope.comment_list.length - 1;
+            }
             return insert_position + 1;
         }
 
@@ -176,7 +187,7 @@
                 //comment.path = data.record[i].path.split("|").slice(0, -1);
                 comment.real_path = data.record[i].path.split("|").slice(0, -1);
                 comment.level = comment.real_path.length;
-                comment.create_time = new Date(comment.create_time);
+                comment.create_time_text = new Date(comment.create_time).toUTCString();
                 comment.top = false;
                 console.log(comment);
                 ip = insertPosition(comment.real_path[comment.real_path.length - 1]);
@@ -192,8 +203,9 @@
                // $compile($scope.newCommentHtml)($scope);
             }
         };
-        $scope.addComment = function (newCommentText) {
-            console.log(arguments);
+        $scope.addComment = function (newCommentText, type) {
+            $scope.newComment = "";
+            console.log(newCommentText, type);
             var newComment = {},
                 date = new Date(),
                 index,
@@ -205,7 +217,9 @@
             if (newCommentText) {
                 $scope.newComment = "";
                 newComment.text = newCommentText;
+                newComment.type = 0;
                 newComment.create_time = date.toJSON();
+                newComment.create_time_text = date.toUTCString();
                 newComment.username = UserService.display_name;
 
                 for (i = 0; i < $scope.comment_list.length && parent === null; i++) {
@@ -256,9 +270,36 @@
         };
     }
 
+    /*
+     filter: comment_type
+     convert int comment.type to corresponding text
+    * */
+
+    function toCommentType() {
+        /**
+         * @return {string}
+         */
+        function CommentTypeFilter(comment_type) {
+            switch (comment_type) {
+            case 0:
+                return "Comment";
+            case 1:
+                return "Question";
+            case 2:
+                return "Answer";
+            default:
+                return "Other";
+
+            }
+        }
+        return CommentTypeFilter;
+    }
+
+
     app.controller("SessionController", SessionController);
     app.controller("ParagraphController", ParagraphController);
     app.controller("CommentController", CommentController);
+    app.filter("toCommentType", toCommentType);
 }());
 
 
