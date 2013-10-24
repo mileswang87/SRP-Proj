@@ -217,7 +217,7 @@
             if (newCommentText) {
                 $scope.newComment = "";
                 newComment.text = newCommentText;
-                newComment.type = 0;
+                newComment.type = type;
                 newComment.create_time = date.toJSON();
                 newComment.create_time_text = date.toUTCString();
                 newComment.username = UserService.display_name;
