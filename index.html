@@ -77,6 +77,10 @@
             width: 100%;
         }
 
+        .votes{
+            width: 25px;
+        }
+
     </style>
 </head>
 <body ng-app="srp-app">
@@ -168,9 +172,9 @@
                                     <!--ng-repeat="n in [] | range:comment.level*2"></span>-->
                                     <!--<i ng-show="comment.level > 0">Level {{ comment.level }}:</i>-->
                                     <div class="ib btn-group" ng-show="comment.level > 0">
-                                        <button class="btn btn-xs btn-default"> <span class="glyphicon glyphicon-arrow-up"></span></button>
-                                        <span class="disabled btn btn-xs btn-default">{{ comment.vote }}</span>
-                                        <button class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-down"></span></button>
+                                        <button class="btn btn-xs btn-primary" ng-class="comment.voted && 'disabled'" ng-click="voteUp(comment)"> <span class="glyphicon glyphicon-arrow-up"></span></button>
+                                        <span class="votes disabled btn btn-xs btn-default">{{ comment.vote }}</span>
+                                        <button class="btn btn-xs btn-primary" ng-class="comment.voted && 'disabled'"  ng-click="voteDown(comment)"><span class="glyphicon glyphicon-arrow-down"></span></button>
                                     </div>
 
                                     <span class="type" ng-show="comment.level > 0">{{ comment.type|toCommentType }}:</span>

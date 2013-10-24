@@ -189,6 +189,7 @@
                 comment.level = comment.real_path.length;
                 comment.create_time_text = new Date(comment.create_time).toUTCString();
                 comment.top = false;
+                comment.voted = false;
                 console.log(comment);
                 ip = insertPosition(comment.real_path[comment.real_path.length - 1]);
                 $scope.comment_list.splice(ip, 0, comment);
@@ -203,6 +204,17 @@
                // $compile($scope.newCommentHtml)($scope);
             }
         };
+
+        $scope.voteUp = function (comment) {
+            comment.vote += 1;
+            comment.voted = true;
+        };
+
+        $scope.voteDown = function (comment) {
+            comment.vote -= 1;
+            comment.voted = true;
+        };
+
         $scope.addComment = function (newCommentText, type) {
             $scope.newComment = "";
             console.log(newCommentText, type);
@@ -217,7 +229,7 @@
             if (newCommentText) {
                 $scope.newComment = "";
                 newComment.text = newCommentText;
-                newComment.votes = 0;
+                newComment.vote = 0;
                 newComment.type = type;
                 newComment.create_time = date.toJSON();
                 newComment.create_time_text = date.toUTCString();
