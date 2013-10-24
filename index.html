@@ -27,6 +27,14 @@
             float:right;
         }
 
+        .fl{
+            float: left;
+        }
+
+        .ib{
+            display: inline-block;
+        }
+
         .level2{
             margin-left: 30px;
             font-size:80%;
@@ -47,6 +55,7 @@
             margin-left: 150px;
             font-size:80%;
         }
+
 
         [ng\:cloak], [ng-cloak], .ng-cloak {
             display: none !important;
@@ -152,12 +161,18 @@
                             <ul class="list-group">
                                 <li class="list-group-item"
                                     ng-hide="comment_list.length"><i>No Comments</i></li>
-                                <li class="list-group-item level{{ comment.level }}"
+                                <li class="list-group-item levels level{{ comment.level }}"
                                     ng-class="{'active' : comment.id == activeComment}"
                                     ng-repeat="comment in comment_list">
                                     <!--<span class="glyphicon glyphicon-chevron-right  glyphicon-chevron-right"-->
                                     <!--ng-repeat="n in [] | range:comment.level*2"></span>-->
                                     <!--<i ng-show="comment.level > 0">Level {{ comment.level }}:</i>-->
+                                    <div class="ib btn-group" ng-show="comment.level > 0">
+                                        <button class="btn btn-xs btn-default"> <span class="glyphicon glyphicon-arrow-up"></span></button>
+                                        <span class="disabled btn btn-xs btn-default">{{ comment.vote }}</span>
+                                        <button class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-down"></span></button>
+                                    </div>
+
                                     <span class="type" ng-show="comment.level > 0">{{ comment.type|toCommentType }}:</span>
                                     <span ng-click="active(comment)">{{ comment.text }}</span>
                                     <span class="fr f10">{{ comment.username }}</span>
