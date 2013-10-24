@@ -52,6 +52,11 @@
             display: none !important;
         }
 
+        .time{
+            font-size:80%;
+            margin: 0 50px;
+        }
+
     </style>
 </head>
 <body ng-app="srp-app">
@@ -144,6 +149,7 @@
                                     <!--<i ng-show="comment.level > 0">Level {{ comment.level }}:</i>-->
                                     <span ng-click="active(comment)">{{ comment.text }}</span>
                                     <span class="fr">{{ comment.username }}</span>
+                                    <span class="fr time">{{ comment.create_time }}</span>
                                     <div compile-content="(userService.loggedIn && comment.id == activeComment && comment.level <= 5 )&&newCommentHtml||''"></div>
                                 </li>
                             </ul>

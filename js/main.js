@@ -194,6 +194,7 @@
         $scope.addComment = function (newCommentText) {
             console.log(arguments);
             var newComment = {},
+                date = new Date(),
                 index,
                 position = 0,
                 i,
@@ -203,6 +204,7 @@
             if (newCommentText) {
                 $scope.newComment = "";
                 newComment.text = newCommentText;
+                newComment.create_time = date.toUTCString();
                 newComment.username = UserService.display_name;
 
                 for (i = 0; i < $scope.comment_list.length && parent === null; i++) {
