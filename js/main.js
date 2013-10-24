@@ -147,7 +147,7 @@
         $scope.userService = UserService;
         $scope.activeComment = null;
         $scope.newCommentType = 0;
-        $scope.newCommentHtml = '<form ng-submit="addComment(newComment, commentType)">' +
+        $scope.newCommentHtml = '<form ng-submit="addComment(newComment, newCommentType)">' +
             '<label>Type:</label>' +
             '</label><select ng-model="$parent.newCommentType">' +
             '<option value="0">Comment</option>' +
