@@ -287,12 +287,12 @@
                     '/db/SRPComments',
                     newComment,
                     function (data) {
-                        newComment.id = data.id;
+                        console.log("asdfff", data);
+                        newComment.id = data[0].id;
                         $scope.comment_list.splice(ip, 0, newComment);
                         $scope.activeComment = null;
                     }
                 );
-                $scope.activeComment = null;
                 //console.log(position);
                 //console.log($scope.comment_list);
             }
