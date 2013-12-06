@@ -259,7 +259,7 @@
                         if (parent.top) {
                             //add a top level comment
                             newComment.level = 1;
-                            console.log(parent.id.substr(1));
+                            //console.log(parent.id.substr(1));
                             newComment.path = parent.id.substr(1) + "|";
                         } else {
                             //add a non-top level comment
@@ -275,7 +275,7 @@
                 if (parent.top) {
                     //add a top level comment
                     newComment.level = 1;
-                    console.log(parent.id.substr(1));
+                    //console.log(parent.id.substr(1));
                     newComment.path = parent.id.substr(1) + "|";
                 } else {
                     //add a non-top level comment
