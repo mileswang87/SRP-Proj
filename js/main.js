@@ -89,7 +89,7 @@
         $scope.in_registration = false;
         $scope.userService = UserService;
         function login_success(data) {
-            console.log(data);
+            //console.log(data);
             UserService.display_name = data.display_name;
             UserService.loggedIn = true;
             $scope.loggedIn = true;
@@ -170,8 +170,13 @@
         function insertPosition(parent_id) {
             var i,
                 insert_position = 0;
+            if (parent_id) {
+                parent_id = parseInt(parent_id, 10);
+            } else {
+                parent_id = null;
+            }
             for (i = 0; i < $scope.comment_list.length; i++) {
-                if ($scope.comment_list[i].id === parent_id || $scope.comment_list[i].real_path.indexOf(parent_id) !== -1) {
+                if ($scope.comment_list[i].id === parent_id) {
                     //find insert position
                     insert_position = i;
                 }
@@ -179,12 +184,13 @@
             if (insert_position === 0) {
                 insert_position = $scope.comment_list.length - 1;
             }
+
             return insert_position + 1;
         }
 
         /** @namespace data.record */
         REST.ajaxGet("/db/SRPComments", params, function (data) {
-            var i, comment, ip;
+            var i, comment, ip, parent_id;
             for (i = 0; i < data.record.length; i++) {
                 comment = data.record[i];
                 //comment.path = data.record[i].path.split("|").slice(0, -1);
@@ -193,8 +199,14 @@
                 comment.create_time_text = new Date((new Date(comment.create_time) - 60000 * timeOffset)).toLocaleString();
                 comment.top = false;
                 comment.voted = comment.vote > 0;
-                console.log(comment);
-                ip = insertPosition(comment.real_path[comment.real_path.length - 1]);
+                //console.log(comment);
+                if (comment.real_path.length <= 1) {
+                    parent_id = null;
+                } else {
+                    parent_id = comment.real_path[comment.real_path.length - 1];
+                }
+                ip = insertPosition(parent_id);
+                console.log("insert " + parent_id + " to " + ip, comment);
                 $scope.comment_list.splice(ip, 0, comment);
             }
         });
@@ -220,7 +232,7 @@
 
         $scope.addComment = function (newCommentText, type) {
             $scope.newComment = "";
-            console.log(newCommentText, type);
+            //console.log(newCommentText, type);
             var newComment = {},
                 date = new Date(),
                 index,
@@ -280,8 +292,9 @@
                         $scope.activeComment = null;
                     }
                 );
-                console.log(position);
-                console.log($scope.comment_list);
+                $scope.activeComment = null;
+                //console.log(position);
+                //console.log($scope.comment_list);
             }
         };
     }
